@@ -13,6 +13,7 @@ class Game
   end
 
   def play
+    current_player.display(board)
   end
 
   def play_turn

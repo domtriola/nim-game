@@ -3,7 +3,6 @@ require "game"
 describe Board do
   let(:board) { Board.new([3,4,5]) }
 
-
   it "exposes a @rows instance variable" do
     ivar = board.instance_variable_get(:@rows)
 
