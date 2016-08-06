@@ -5,9 +5,9 @@ class Board
     @rows = rows
   end
 
-  def remove_from_row(row, number)
+  def remove_from_row(selection)
   end
 
-  def nim_sum
+  def nim_sum(array)
   end
 end
