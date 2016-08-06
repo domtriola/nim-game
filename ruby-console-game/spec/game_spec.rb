@@ -47,4 +47,36 @@ describe Game do
       expect(game.current_player).to be(game.player_one)
     end
   end
+
+  describe "#play_turn" do
+    it "has current_player make a move" do
+      rows_before = game.board.rows
+      game.play_turn
+      expect(game.board.rows).not_to eq(rows_before)
+    end
+
+    it "switches current_player afterward" do
+      game.play_turn
+      expect(game.current_player).to eq(game.player_two)
+    end
+  end
+
+  describe "#over?" do
+    it "returns true when all rows have zero beans" do
+      game_done = Game.new([0,0,0])
+      expect(game_done.over?).to be_truthy
+    end
+
+    it "returns false when any rows are greater than zero" do
+      expect(game.over?).to be_falsey
+    end
+  end
+
+  describe "#winner" do
+    it "returns the winning player when game is over" do
+      finish = Game.new([1])
+      finish.play_turn
+      expect(finish.winner).to be(game.player_two)
+    end
+  end
 end
