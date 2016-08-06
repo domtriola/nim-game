@@ -1,4 +1,5 @@
 class ComputerPlayer
+  attr_accessor :board
 
   def get_move
     # choose best move based on nim_sum
