@@ -12,4 +12,18 @@ class Game
     @current_player = player_one
   end
 
+  def play
+  end
+
+  def play_turn
+  end
+
+  def switch_players!
+  end
+
+  def over?
+  end
+
+  def winner
+  end
 end
