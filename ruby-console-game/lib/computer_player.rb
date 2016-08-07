@@ -8,7 +8,7 @@ class ComputerPlayer
     all_moves = []
     board.rows.each_with_index do |row, row_index|
       (1..row).each do |bean_count|
-        move = [(index + 97).chr, bean_count]
+        move = [index, bean_count]
         zero_sums << move if makes_zero_nim_sum?(move)
         all_moves << move
       end

@@ -17,13 +17,10 @@ describe Board do
     end
   end
 
-  describe "#nim_sum" do
-    it "returns a non-zero nim-sum" do
-      expect(board.nim_sum([1,2,4])).to eq(3)
-    end
-
-    it "returns a zero nim-sum" do
-      expect(board.nim_sum([1,2,3])).to eq(0)
+  describe "#add_to_row" do
+    it "adds beans to selected row" do
+      board.add_to_row([0,1])
+      expect(board.rows).to eq([4,4,5])
     end
   end
 end

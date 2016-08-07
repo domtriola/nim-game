@@ -4,6 +4,10 @@ describe ComputerPlayer do
   let(:computer) { ComputerPlayer.new }
   let(:board) { Board.new([1,2,4]) }
 
+  before(:each) do
+    computer.display(board)
+  end
+
   describe "#display" do
     it "should set board to an instance variable @board" do
       computer.display(board)

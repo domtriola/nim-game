@@ -7,9 +7,11 @@ class Board
     @rows = rows
   end
 
-  def remove_from_row(selection)
+  def remove_from_row(move)
+    rows[move[0]] -= move[1]
   end
 
-  def add_to_row(selection)
+  def add_to_row(move)
+    rows[move[0]] += move[1]
   end
 end
