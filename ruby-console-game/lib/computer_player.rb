@@ -1,3 +1,5 @@
+require_relative 'nim'
+
 class ComputerPlayer
   attr_accessor :board
 

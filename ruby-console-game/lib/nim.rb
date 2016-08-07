@@ -1,7 +1,5 @@
-require 'byebug'
-
 class Nim
-  def sum(nums)
+  def self.sum(nums)
     binaries = nums.map { |num| convert_from_base_ten(num, 2) }
     max = binaries.map(&:length).max
     binaries = binaries.map { |binary| pad(binary, max) }
@@ -17,10 +15,10 @@ class Nim
         end
       end
     end
-    convert_from_binary_to_base_ten(result.to_i.to_s)
+    convert_from_binary_to_base_ten(result)
   end
 
-  def convert_from_base_ten(num, base)
+  def self.convert_from_base_ten(num, base)
     digit_strings = {
       0 => '0',
       1 => '1',
@@ -51,7 +49,7 @@ class Nim
     result.join
   end
 
-  def convert_from_binary_to_base_ten(binary)
+  def self.convert_from_binary_to_base_ten(binary)
     result = 0
     binary.reverse.each_char.with_index do |char, index|
       result += char.to_i * 2 ** index
@@ -59,7 +57,7 @@ class Nim
     result
   end
 
-  def pad(string, length)
+  def self.pad(string, length)
     result = string
     until result.length == length
       result = "0" + result
