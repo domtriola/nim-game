@@ -1,3 +1,5 @@
+require_relative 'nim'
+
 class Board
   attr_accessor :rows
 
@@ -6,8 +8,5 @@ class Board
   end
 
   def remove_from_row(selection)
-  end
-
-  def nim_sum(array)
   end
 end
