@@ -49,15 +49,23 @@ describe Game do
   end
 
   describe "#play_turn" do
+    before(:each) do
+      allow(game.player_one).to receive(:display)
+      allow(game.player_two).to receive(:display)
+      allow(game.player_one).to receive(:get_move).and_return([0,1])
+    end
+
     it "has current_player make a move" do
-      rows_before = game.board.rows
+      expect(game.player_one).to receive(:get_move).and_return(:move)
+      expect(game.board).to receive(:remove_from_row).with(:move)
+
       game.play_turn
-      expect(game.board.rows).not_to eq(rows_before)
     end
 
     it "switches current_player afterward" do
+      expect(game).to receive(:switch_players!)
+
       game.play_turn
-      expect(game.current_player).to eq(game.player_two)
     end
   end
 

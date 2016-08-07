@@ -13,18 +13,36 @@ class Game
   end
 
   def play
-    current_player.display(board)
+    until over?
+      play_turn
+    end
+    if winner == player_one
+      puts "You win!"
+    else
+      puts "You lose"
+    end
   end
 
   def play_turn
+    current_player.display(board)
+    board.remove_from_row(current_player.get_move)
+    switch_players!
   end
 
   def switch_players!
+    if current_player == player_one
+      current_player = player_two
+    else
+      current_player = player_one
+    end
   end
 
   def over?
+    board.rows.all? { |row| row == 0 }
   end
 
   def winner
+    return current_player if over?
+    nil
   end
 end
