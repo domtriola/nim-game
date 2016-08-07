@@ -9,4 +9,7 @@ class Board
 
   def remove_from_row(selection)
   end
+
+  def add_to_row(selection)
+  end
 end
