@@ -25,15 +25,15 @@ class Game
 
   def play_turn
     current_player.display(board)
-    board.remove_from_row(current_player.get_move)
+    board.remove_from_row(@current_player.get_move)
     switch_players!
   end
 
   def switch_players!
-    if current_player == player_one
-      current_player = player_two
+    if @current_player == player_one
+      @current_player = player_two
     else
-      current_player = player_one
+      @current_player = player_one
     end
   end
 
