@@ -14,6 +14,7 @@ class Game
 
   def play
     until over?
+      system('clear')
       play_turn
     end
     if winner == player_one

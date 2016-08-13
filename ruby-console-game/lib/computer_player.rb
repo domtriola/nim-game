@@ -15,8 +15,7 @@ class ComputerPlayer
       end
     end
     all_moves.each { |move| return move if best_move?(move) }
-    good_moves = zero_sums.reject { |move| makes_odd_equal_rows?(move) }
-    return good_moves.sample unless good_moves.empty?
+    return zero_sums.sample unless zero_sums.empty?
     all_moves.sample
   end
 
@@ -35,27 +34,12 @@ class ComputerPlayer
     end
   end
 
-  def makes_odd_equal_rows?(move)
-    board.remove_from_row(move)
-    nonzero_rows = board.rows.reject { |row| row == 0 }
-    if nonzero_rows.all? { |row| row == nonzero_rows[0] }
-      board.add_to_row(move)
-      return true if nonzero_rows.count.odd?
-    else
-      board.add_to_row(move)
-      false
-    end
-  end
-
   def best_move?(move)
     board.remove_from_row(move)
     nonzero_rows = board.rows.reject { |row| row == 0 }
     if nonzero_rows.all? { |row| row == 1 }
       board.add_to_row(move)
       nonzero_rows.count.odd? ? true : false
-    elsif nonzero_rows.all? { |row| row == nonzero_rows[0] }
-      board.add_to_row(move)
-      nonzero_rows.count.even? ? true : false
     elsif board.rows.inject(:+) == 1
       board.add_to_row(move)
       true
