@@ -27,14 +27,16 @@ class Game
 
   def play_turn
     current_player.display(board)
-    puts "The computer took #{last_move[1]} bean(s) from row #{(last_move[0] + 97).chr}" unless last_move.nil?
-    @last_move = @current_player.get_move
+    unless last_move.nil? || current_player.class == ComputerPlayer
+      puts "The computer took #{last_move[1]} bean(s) from row #{(last_move[0] + 97).chr}"
+    end
+    @last_move = current_player.get_move
     board.remove_from_row(last_move)
     switch_players!
   end
 
   def switch_players!
-    if @current_player == player_one
+    if current_player == player_one
       @current_player = player_two
     else
       @current_player = player_one
