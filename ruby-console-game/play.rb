@@ -7,5 +7,3 @@ if __FILE__ == $PROGRAM_NAME
   rows = gets.chomp.split(/,\s|,/).map(&:to_i)
   rows.empty? ? Game.new().play : Game.new(rows).play
 end
-
-# Game.new().play

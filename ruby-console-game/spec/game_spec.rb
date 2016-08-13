@@ -79,4 +79,11 @@ describe Game do
       expect(game.over?).to be_falsey
     end
   end
+
+  describe "#winner" do
+    it "returns the correct player when the game is over" do
+      game_done = Game.new([0,0,0])
+      expect(game_done.winner.class).to be(game.current_player.class)
+    end
+  end
 end

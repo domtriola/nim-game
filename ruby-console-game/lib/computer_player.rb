@@ -4,7 +4,6 @@ class ComputerPlayer
   attr_accessor :board
 
   def get_move
-    # debugger
     zero_sums = []
     all_moves = []
     board.rows.each_with_index do |row, row_index|
