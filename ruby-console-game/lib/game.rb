@@ -3,13 +3,14 @@ require_relative 'human_player'
 require_relative 'computer_player'
 
 class Game
-  attr_accessor :board, :player_one, :player_two, :current_player
+  attr_accessor :board, :player_one, :player_two, :current_player, :last_move
 
   def initialize(rows = [3,4,5])
     @board = Board.new(rows)
     @player_one = HumanPlayer.new
     @player_two = ComputerPlayer.new
     @current_player = player_one
+    @last_move = nil
   end
 
   def play
@@ -26,7 +27,9 @@ class Game
 
   def play_turn
     current_player.display(board)
-    board.remove_from_row(@current_player.get_move)
+    puts "The computer took #{last_move[1]} bean(s) from row #{(last_move[0] + 97).chr}" unless last_move.nil?
+    @last_move = @current_player.get_move
+    board.remove_from_row(last_move)
     switch_players!
   end
 
