@@ -1,7 +1,8 @@
 # Nim Game #
 
-Nim is a game where players alternate taking any number of tokens from one row.
-This is a misere version, meaning the player to take the last token loses.
+Nim is a game where players alternate taking any number of tokens from one row
+at a time. This is a misere version, meaning the player to take the last token
+loses.
 
 The computer AI uses the [mathematical theory](https://en.wikipedia.org/wiki/Nim#Mathematical_theory) behind Nim to
 play perfectly (when winning moves are available to it).
