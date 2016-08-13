@@ -46,12 +46,6 @@ describe HumanPlayer do
       $stdin.string << "a, 3"
       expect(human.get_move).to eq([0, 3])
     end
-
-    it "does not let player choose 0 beans" do
-      $stdin.string << "a, 0"
-      human.get_move
-      expect(recent_output).to match(/choose at least/)
-    end
   end
 
   describe "#display" do

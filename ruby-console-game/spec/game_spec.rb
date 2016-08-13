@@ -79,12 +79,4 @@ describe Game do
       expect(game.over?).to be_falsey
     end
   end
-
-  describe "#winner" do
-    it "returns the winning player when game is over" do
-      finish = Game.new([1])
-      finish.play_turn
-      expect(finish.winner).to be(game.player_two)
-    end
-  end
 end
