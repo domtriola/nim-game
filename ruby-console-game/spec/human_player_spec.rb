@@ -19,12 +19,6 @@ describe HumanPlayer do
       end
     end
 
-    def recent_output
-      outputs = $stdout.string.split("\n")
-      max = [outputs.length, 8].min
-      outputs[-max..-1].join(" ")
-    end
-
     def human.get_move!
       get_move rescue NoMoreInput
     end
