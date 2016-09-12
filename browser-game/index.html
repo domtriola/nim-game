@@ -3,7 +3,7 @@
   <head>
     <title>Nim</title>
     <style>
-      .board {
+      #game {
         margin: 50px;
       }
       .token {
@@ -14,6 +14,9 @@
         display: inline-block;
         margin: 4px;
       }
+      .token[data-chosen=true] {
+        background-color: orange;
+      }
       .token:hover {
         cursor: pointer;
       }
@@ -21,8 +24,10 @@
     <script src="nim.js"></script>
   </head>
   <body>
+    <div id="game">
+    </div>
     <script>
-      var game = DOMDisplay(document.body, [3,4,5]);
+      var game = DOMDisplay(document.getElementById("game"), [3,4,5]);
     </script>
   </body>
 </html>
