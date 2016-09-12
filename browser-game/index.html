@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Nim</title>
+    <style>
+      .board {
+        margin: 50px;
+      }
+      .token {
+        width: 20px;
+        height: 20px;
+        background-color: teal;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 4px;
+      }
+      .token:hover {
+        cursor: pointer;
+      }
+    </style>
+    <script src="nim.js"></script>
+  </head>
+  <body>
+    <script>
+      var game = DOMDisplay(document.body, [3,4,5]);
+    </script>
+  </body>
+</html>
