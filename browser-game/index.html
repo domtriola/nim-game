@@ -29,9 +29,10 @@
     <script>
       var gameElt = document.getElementById("game");
       var board = [3,4,5];
-      var playerOne = new HumanPlayer("#1");
-      var playerTwo = new HumanPlayer("#2");
-      var game = new Game(gameElt, board, playerOne, playerTwo);
+      var playerOne = new HumanPlayer("Player 1");
+      var playerTwo = new HumanPlayer("Player 2");
+      var playerComp = new ComputerPlayer("Computer");
+      var game = new Game(gameElt, board, playerOne, playerComp);
       game.play();
     </script>
   </body>

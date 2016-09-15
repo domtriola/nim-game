@@ -58,28 +58,28 @@ Game.prototype.switchPlayers = function() {
   this.play();
 };
 Game.prototype.play = function() {
-  this.currentPlayer.takeTurn(this.playerTurn, this.controls);
   if (this.over()) {
     var winText = this.parent.appendChild(elt("h4"));
     winText.innerHTML = currentPlayer.name + " Wins!";
   }
+  this.currentPlayer.takeTurn(this);
 };
 Game.prototype.over = function() {
-  
+
 };
 
 function HumanPlayer(name) {
   this.name = name;
 }
-HumanPlayer.prototype.takeTurn = function(playerTurn, controls) {
-  playerTurn.innerHTML = this.name + "'s Turn";
-  controls.style = 'display: block';
+HumanPlayer.prototype.takeTurn = function(game) {
+  game.playerTurn.innerHTML = this.name + "'s Turn";
+  game.controls.style = 'display: block';
 };
 
 function ComputerPlayer(name) {
   this.name = name;
 }
-ComputerPlayer.prototype.takeTurn = function(playerTurn, controls) {
-  playerTurn.innerHTML = this.name + "'s Turn";
-  controls.style = 'display: none';
+ComputerPlayer.prototype.takeTurn = function(game) {
+  game.playerTurn.innerHTML = this.name + "'s Turn";
+  game.controls.style = 'display: none';
 };
