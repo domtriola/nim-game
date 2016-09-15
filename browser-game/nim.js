@@ -82,6 +82,34 @@ function ComputerPlayer(name) {
 ComputerPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
   game.controls.style = 'display: none';
+
+  this.board = [];
+  for (var i = 0; i < game.board.children.length; i++)
+    this.board.push(game.board.children[i].children.length);
+  var allMoves = [], zeroSumMoves = [];
+  for (var i = 0; i < this.board.length; i++) {
+    for (var j = 0; j < this.board[i].length; j++) {
+      var move = [i,j];
+      allMoves.push(move);
+      if (this.makesZeroSum(move))
+        zeroSumMoves.push(move);
+    }
+  }
+};
+alert('left off here');
+ComputerPlayer.prototype.isBestMove = function(move) {
+  var board = this.board;
+  board[move[0]] -= move[1];
+};
+ComputerPlayer.prototype.makesZeroSum = function(move) {
+  var board = this.board;
+  board[move[0]] -= move[1];
+  if (nimSum(board) == 0)
+    return true;
+  return false;
+};
+ComputerPlayer.prototype.makeMove = function(move) {
+
 };
 
 function nimSum(nums) {
