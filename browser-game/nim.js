@@ -83,3 +83,43 @@ ComputerPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
   game.controls.style = 'display: none';
 };
+
+function nimSum(nums) {
+  var binaryNums = [];
+  var paddedNums = [];
+  var maxLength = 0;
+  nums.forEach(function(num) {
+    binaryNums.push(num.toString(2));
+  });
+  binaryNums.forEach(function(num) {
+    if (num.length > maxLength)
+      maxLength = num.length;
+  });
+  binaryNums.forEach(function(num) {
+    paddedNums.push(pad(num, maxLength));
+  });
+  var result = null;
+  paddedNums.forEach(function(num) {
+    if (result == null)
+      result = num;
+    else {
+      for (var i = 0; i < num.length; i++) {
+        if (num[i] == "1") {
+          if (result[i] == "0")
+            result = result.replaceAt(i, "1");
+          else
+            result = result.replaceAt(i, "0");
+        }
+      }
+    }
+  });
+  return parseInt(result, 2);
+}
+function pad(string, length) {
+  while (string.length < length)
+    string = "0" + string;
+  return string;
+}
+String.prototype.replaceAt = function(index, char) {
+  return this.substr(0, index) + char + this.substr(index + 1);
+}
