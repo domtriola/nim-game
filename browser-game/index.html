@@ -27,7 +27,12 @@
     <div id="game">
     </div>
     <script>
-      var game = DOMDisplay(document.getElementById("game"), [3,4,5]);
+      var gameElt = document.getElementById("game");
+      var board = [3,4,5];
+      var playerOne = new HumanPlayer("#1");
+      var playerTwo = new HumanPlayer("#2");
+      var game = new Game(gameElt, board, playerOne, playerTwo);
+      game.play();
     </script>
   </body>
 </html>
