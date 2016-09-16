@@ -3,6 +3,11 @@
   <head>
     <title>Nim</title>
     <style>
+      #cover {
+        height: 300px;
+        width: 300px;
+        position: absolute;
+      }
       #game {
         margin: 50px;
       }
@@ -24,8 +29,8 @@
     <script src="nim.js"></script>
   </head>
   <body>
-    <div id="game">
-    </div>
+    <div id="cover"></div>
+    <div id="game"></div>
     <script>
       var gameElt = document.getElementById("game");
       var board = [3,4,5];

@@ -13,6 +13,7 @@ function Game(parent, board, playerOne, playerTwo) {
   var self = this;
 
   this.playerTurn = parent.appendChild(elt('h2'));
+  this.cover = document.getElementById('cover');
 
   this.board = parent.appendChild(elt('div'));
   this.board.id = 'board';
@@ -73,7 +74,8 @@ function HumanPlayer(name) {
 }
 HumanPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
-  game.controls.style = 'display: block';
+  game.controls.style = 'display: block;';
+  game.cover.style = 'display: none;';
 };
 
 function ComputerPlayer(name) {
@@ -81,7 +83,8 @@ function ComputerPlayer(name) {
 }
 ComputerPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
-  game.controls.style = 'display: none';
+  game.controls.style = 'display: none;';
+  game.cover.style = 'display: block;'
 
   this.board = [];
   for (var i = 0; i < game.board.children.length; i++)
@@ -96,10 +99,10 @@ ComputerPlayer.prototype.takeTurn = function(game) {
     }
   }
 };
-alert('left off here');
 ComputerPlayer.prototype.isBestMove = function(move) {
   var board = this.board;
   board[move[0]] -= move[1];
+
 };
 ComputerPlayer.prototype.makesZeroSum = function(move) {
   var board = this.board;
