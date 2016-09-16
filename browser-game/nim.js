@@ -86,6 +86,11 @@ ComputerPlayer.prototype.takeTurn = function(game) {
   game.controls.style = 'display: none;';
   game.cover.style = 'display: block;'
 
+  var move = this.getMove();
+  this.makeMove(move);
+  game.switchPlayers();
+};
+ComputerPlayer.prototype.getMove = function() {
   this.board = [];
   for (var i = 0; i < game.board.children.length; i++)
     this.board.push(game.board.children[i].children.length);
@@ -98,11 +103,36 @@ ComputerPlayer.prototype.takeTurn = function(game) {
         zeroSumMoves.push(move);
     }
   }
-};
+  for (var i = 0; i < allMoves.length; i++) {
+    if (this.isBestMove(allMoves[i]))
+      return allMoves[i];
+  }
+  if (zeroSumMoves.length < 1) {
+    return allMoves[Math.floor(Math.random() * allMoves.length)];
+  } else {
+    return zeroSumMoves[Math.floor(Math.random() * zeroSumMoves.length)];
+  }
+}
 ComputerPlayer.prototype.isBestMove = function(move) {
   var board = this.board;
   board[move[0]] -= move[1];
-
+  function greaterThanZero(num) {
+    return num > 0;
+  }
+  function equalsOne(num) {
+    return num == 1;
+  }
+  function sum(a, b) {
+    return a + b;
+  }
+  board = board.filter(greaterThanZero);
+  if (board.every(equalsOne)) {
+    return board.length % 2 ? true : false;
+  } else if (board.reduce(sum) == 1) {
+    return true;
+  } else {
+    return false;
+  }
 };
 ComputerPlayer.prototype.makesZeroSum = function(move) {
   var board = this.board;
@@ -112,7 +142,7 @@ ComputerPlayer.prototype.makesZeroSum = function(move) {
   return false;
 };
 ComputerPlayer.prototype.makeMove = function(move) {
-
+  
 };
 
 function nimSum(nums) {
