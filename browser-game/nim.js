@@ -37,6 +37,7 @@ function Game(parent, board, playerOne, playerTwo) {
   this.controls = parent.appendChild(elt('div'));
   this.controls.id = 'controls';
   var moveButton = this.controls.appendChild(elt('button'));
+  moveButton.id = 'move';
   moveButton.innerHTML = 'move';
   moveButton.addEventListener('click', function() {
     var board = document.getElementById('board');
@@ -84,7 +85,6 @@ function HumanPlayer(name) {
 }
 HumanPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
-  game.controls.style = 'display: block;';
   game.cover.style = 'display: none;';
 };
 
@@ -93,12 +93,10 @@ function ComputerPlayer(name) {
 }
 ComputerPlayer.prototype.takeTurn = function(game) {
   game.playerTurn.innerHTML = this.name + "'s Turn";
-  game.controls.style = 'display: none;';
   game.cover.style = 'display: block;'
 
   var move = this.getMove(game);
   this.makeMove(move);
-  game.switchPlayers();
 };
 ComputerPlayer.prototype.getMove = function(game) {
   this.board = [];
@@ -153,10 +151,22 @@ ComputerPlayer.prototype.makesZeroSum = function(move) {
 };
 ComputerPlayer.prototype.makeMove = function(move) {
   var board = document.getElementById('board');
-  for (var i = move[1]; i > 0; i--) {
-    var token = board.children[move[0]].children[i - 1];
-    token.parentNode.removeChild(token);
+  var moveButton = document.getElementById('move');
+  function clickMoveButton() {
+    moveButton.click();
   }
+  function delayedTokenClicks(i) {
+    var interval = i * 500 + 500;
+    setTimeout(function() {
+      var token = board.children[move[0]].children[i];
+      token.click();
+    }, interval);
+  }
+  for (var i = move[1] - 1; i >= 0; i--) {
+    delayedTokenClicks(i);
+  }
+  var finalInterval = move[1] * 500 + 1000;
+  setTimeout(clickMoveButton, finalInterval);
 };
 
 function nimSum(nums) {
