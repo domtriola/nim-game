@@ -106,7 +106,7 @@ ComputerPlayer.prototype.getMove = function(game) {
     this.board.push(game.board.children[i].children.length);
   var allMoves = [], zeroSumMoves = [];
   for (var i = 0; i < this.board.length; i++) {
-    for (var j = 0; j < this.board[i]; j++) {
+    for (var j = 1; j <= this.board[i]; j++) {
       var move = [i,j];
       allMoves.push(move);
       if (this.makesZeroSum(move))
@@ -124,7 +124,7 @@ ComputerPlayer.prototype.getMove = function(game) {
   }
 }
 ComputerPlayer.prototype.isBestMove = function(move) {
-  var board = this.board;
+  var board = this.board.slice(0);
   board[move[0]] -= move[1];
   function greaterThanZero(num) {
     return num > 0;
@@ -145,7 +145,7 @@ ComputerPlayer.prototype.isBestMove = function(move) {
   }
 };
 ComputerPlayer.prototype.makesZeroSum = function(move) {
-  var board = this.board;
+  var board = this.board.slice(0);
   board[move[0]] -= move[1];
   if (nimSum(board) == 0)
     return true;
@@ -153,8 +153,8 @@ ComputerPlayer.prototype.makesZeroSum = function(move) {
 };
 ComputerPlayer.prototype.makeMove = function(move) {
   var board = document.getElementById('board');
-  for (var i = move[1]; i >= 0; i--) {
-    var token = board.children[move[0]].children[i];
+  for (var i = move[1]; i > 0; i--) {
+    var token = board.children[move[0]].children[i - 1];
     token.parentNode.removeChild(token);
   }
 };
