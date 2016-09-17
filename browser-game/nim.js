@@ -41,15 +41,31 @@ function Game(parent, board, playerOne, playerTwo) {
   moveButton.innerHTML = 'move';
   moveButton.addEventListener('click', function() {
     var board = document.getElementById('board');
+    var chosenTokens = {};
     for (var i = board.children.length - 1; i >= 0; i--) {
       for (var j = board.children[i].children.length - 1; j >= 0; j--) {
         var token = board.children[i].children[j];
         var chosen = token.getAttribute('data-chosen') === 'true';
-        if (chosen)
-          token.parentNode.removeChild(token);
+        if (chosen) {
+          if (chosenTokens[i] != null)
+            chosenTokens[i].push(token);
+          else
+            chosenTokens[i] = [token];
+        }
       }
     }
-    self.switchPlayers();
+    if (Object.keys(chosenTokens).length < 1)
+      alert('You must chose at least one token');
+    else if (Object.keys(chosenTokens).length > 1)
+      alert('You cannot chose from more than one row');
+    else {
+      for (var row in chosenTokens) {
+        chosenTokens[row].forEach(function(token) {
+          token.parentNode.removeChild(token);
+        });
+      }
+      self.switchPlayers();
+    }
   });
 }
 Game.prototype.switchPlayers = function() {
