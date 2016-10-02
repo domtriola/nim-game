@@ -36,6 +36,7 @@ function Game(parent, board, playerOne, playerTwo) {
 
   this.controls = parent.appendChild(elt('div'));
   this.controls.id = 'controls';
+
   var moveButton = this.controls.appendChild(elt('button'));
   moveButton.id = 'move';
   moveButton.innerHTML = 'move';
@@ -66,6 +67,35 @@ function Game(parent, board, playerOne, playerTwo) {
       }
       self.switchPlayers();
     }
+  });
+
+  this.parameters = parent.appendChild(elt("div", "parameters"));
+  this.parameters.id = "parameters";
+  var paramsTitle = this.parameters.appendChild(elt("h4"));
+  paramsTitle.innerHTML = "Tokens / Row";
+  for (var i = 0; i < 4; i++) {
+    var row = document.createElement("input");
+    row.setAttribute("type", "number");
+    row.setAttribute("value", i + 2);
+    row.id = i.toString;
+    this.parameters.appendChild(row);
+  }
+
+  var refresh = this.parameters.appendChild(elt('button'));
+  refresh.innerHTML = "go";
+  refresh.addEventListener("click", function(event) {
+    var queries = "?";
+    var rows = document.querySelectorAll("#parameters input");
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i].value.toString();
+      if (i > 0)
+        queries += "&" + row;
+      else
+        queries += row;
+    }
+    var url = [location.protocol, '//', location.host,
+               location.pathname].join('');
+    window.location = url + queries;
   });
 }
 Game.prototype.switchPlayers = function() {

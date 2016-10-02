@@ -28,6 +28,12 @@
       .token:hover {
         cursor: pointer;
       }
+      .parameters {
+        margin-top: 40px;
+      }
+      .parameters input {
+        display: block;
+      }
     </style>
     <script src="nim.js"></script>
   </head>
@@ -36,7 +42,15 @@
     <div id="game"></div>
     <script>
       var gameElt = document.getElementById("game");
-      var board = [3,4,5];
+      var params = location.href.split("?")[1];
+      if (params != null) {
+        var queries = params.split("&");
+        var board = [];
+        queries.forEach(function(query) {
+          board.push(Number(query));
+        });
+      } else
+        var board = [2,3,4,5];
       var playerOne = new HumanPlayer("Player 1");
       var playerTwo = new HumanPlayer("Player 2");
       var playerComp = new ComputerPlayer("Computer");
