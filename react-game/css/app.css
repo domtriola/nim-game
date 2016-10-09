@@ -1,0 +1,65 @@
+/* General
+---------------------------*/
+body {
+    font-size: 18px;
+    font-family: fantasy;
+}
+
+#container {
+  display: block;
+  margin: 70px auto;
+  width: 500px;
+}
+
+.header {
+  text-align: center;
+}
+
+#game,
+#options {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+}
+
+/* Game Board
+---------------------------*/
+
+#game {
+  width: 30%;
+}
+
+#game .row {
+  height: 32px;
+}
+.token {
+  width: 20px;
+  height: 20px;
+  background-color: teal;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 4px;
+}
+.token[data-chosen=true] {
+  background-color: orange;
+}
+.token:hover {
+  cursor: pointer;
+}
+
+/* Options
+---------------------------*/
+
+#options {
+  width: 70%;
+}
+
+#options .row div {
+  display: inline-block;
+  margin: 5px 10px;
+}
+
+.opponent-choice button {
+  display: inline-block;
+  margin: 5px;
+}
