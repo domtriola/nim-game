@@ -8,45 +8,48 @@
 //   - set # of tokens per row
 //   - allow player to play against another player
 
-function Header() {
+function Header(props) {
   return (
     <div className="header">
       <h1>Nim</h1>
-      <h2>Human Vs. Computer</h2>
+      <h2>Human Vs. {props.opponent}</h2>
     </div>
   );
 }
 
-function Game() {
+function Game(props) {
+  
   return (
     <div id="game">
-      <div class="player-turn">Player 1's Turn</div>
+      <div class="player-turn">Player {props.currentPlayer}s Turn</div>
       <div className="board">
-        <Row />
-        <Row />
+        {props.board.map(function(rowQuantity) {
+          return (
+            <Row quantity={rowQuantity}/>
+          );
+        })}
       </div>
       <button id="move">Move</button>
     </div>
   );
 }
-function Row() {
+function Row(props) {
+  var tokens = [];
+  for (var i = 0; i < props.quantity; i++)
+    tokens.push(<Token />);
   return (
     <div className="row">
-      <Token />
-      <Token />
-      <Token />
+      {tokens}
     </div>
   );
 }
-var Token = React.createClass({
-  render: function() {
-    return (
-      <div is data-chosen="false" class="token"></div>
-    );
-  }
-});
+function Token() {
+  return (
+    <div is data-chosen="false" class="token"></div>
+  );
+}
 
-function Options() {
+function Options(props) {
   return (
     <div id="options">
       <div className="setup">
@@ -57,18 +60,16 @@ function Options() {
             <button>Computer</button>
           </div>
         </div>
-        <div className="row">
-          <div className="row-number"> Row 1 </div>
-          <button className="decrement"> - </button>
-          <div className="row-quantity"> 3 </div>
-          <button className="increment"> + </button>
-        </div>
-        <div className="row">
-          <div className="row-number"> Row 2 </div>
-          <button className="decrement"> - </button>
-          <div className="row-quantity"> 4 </div>
-          <button className="increment"> + </button>
-        </div>
+        {props.initialBoard.map(function(rowQuantity, index) {
+          return (
+            <div className="row">
+              <div className="row-number"> Row {index + 1} </div>
+              <button className="decrement"> - </button>
+              <div className="row-quantity"> {rowQuantity} </div>
+              <button className="increment"> + </button>
+            </div>
+          );
+        })}
         <button id="restart">Restart</button>
       </div>
     </div>
@@ -77,21 +78,38 @@ function Options() {
 
 var Application = React.createClass({
   propTypes: {
-    initialBoard: React.PropTypes.arrayOf(React.PropTypes.number)
+    initialBoard: React.PropTypes.arrayOf(React.PropTypes.number),
+    rowQuantity: React.PropTypes.number,
+    opponent: React.PropTypes.string,
+    startingPlayer: React.PropTypes.number,
   },
 
   getDefaultProps: function() {
     return {
-      initialBoard: [3,4,5],
+      initialBoard: [3,4,5,0],
+      rowQuantity: 4,
+      opponent: "Computer",
+      startingPlayer: 1,
     };
+  },
+
+  getInitialState: function() {
+    return {
+      board: this.props.initialBoard,
+      currentPlayer: this.props.startingPlayer,
+    }
   },
 
   render: function() {
     return (
       <div className="wrapper">
-        <Header />
-        <Game />
-        <Options />
+        <Header opponent={this.props.opponent}/>
+        <Game
+          opponent={this.props.opponent}
+          board={this.state.board}
+          currentPlayer={this.state.currentPlayer}
+        />
+        <Options initialBoard={this.props.initialBoard}/>
       </div>
     );
   }
