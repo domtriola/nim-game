@@ -18,10 +18,10 @@ function Header(props) {
 }
 
 function Game(props) {
-  
+  var apos = "'"; // hack to avoid atom highlighting bug
   return (
     <div id="game">
-      <div class="player-turn">Player {props.currentPlayer}s Turn</div>
+      <div class="player-turn">Player {props.currentPlayer}{apos}s Turn</div>
       <div className="board">
         {props.board.map(function(rowQuantity) {
           return (
