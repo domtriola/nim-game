@@ -20,14 +20,11 @@ body {
   display: inline-block;
   vertical-align: top;
   text-align: center;
+  width: 50%;
 }
 
 /* Game Board
 ---------------------------*/
-
-#game {
-  width: 30%;
-}
 
 #game .row {
   height: 32px;
@@ -49,10 +46,6 @@ body {
 
 /* Options
 ---------------------------*/
-
-#options {
-  width: 70%;
-}
 
 #options .row div {
   display: inline-block;

@@ -22,22 +22,29 @@ function Game() {
     <div id="game">
       <div class="player-turn">Player 1's Turn</div>
       <div className="board">
-        <div className="row">
-          <div className="token"></div>
-          <div className="token"></div>
-          <div className="token"></div>
-        </div>
-        <div className="row">
-          <div className="token"></div>
-          <div className="token"></div>
-          <div className="token"></div>
-          <div className="token"></div>
-        </div>
+        <Row />
+        <Row />
       </div>
       <button id="move">Move</button>
     </div>
   );
 }
+function Row() {
+  return (
+    <div className="row">
+      <Token />
+      <Token />
+      <Token />
+    </div>
+  );
+}
+var Token = React.createClass({
+  render: function() {
+    return (
+      <div is data-chosen="false" class="token"></div>
+    );
+  }
+});
 
 function Options() {
   return (
@@ -69,15 +76,25 @@ function Options() {
 }
 
 var Application = React.createClass({
-    render: function() {
-      return (
-        <div className="wrapper">
-          <Header />
-          <Game />
-          <Options />
-        </div>
-      );
-    }
+  propTypes: {
+    initialBoard: React.PropTypes.arrayOf(React.PropTypes.number)
+  },
+
+  getDefaultProps: function() {
+    return {
+      initialBoard: [3,4,5],
+    };
+  },
+
+  render: function() {
+    return (
+      <div className="wrapper">
+        <Header />
+        <Game />
+        <Options />
+      </div>
+    );
+  }
 });
 
 ReactDOM.render(<Application />, document.getElementById("container"));
