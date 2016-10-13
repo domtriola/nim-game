@@ -24,9 +24,7 @@ function Game(props) {
       <div class="player-turn">Player {props.currentPlayer}{apos}s Turn</div>
       <div className="board">
         {props.board.map(function(rowQuantity) {
-          return (
-            <Row quantity={rowQuantity}/>
-          );
+          return <Row quantity={rowQuantity}/>;
         })}
       </div>
       <button id="move">Move</button>
@@ -60,13 +58,15 @@ function Options(props) {
             <button>Computer</button>
           </div>
         </div>
-        {props.initialBoard.map(function(rowQuantity, index) {
+        {props.rows.map(function(num, index) {
           return (
             <div className="row">
               <div className="row-number"> Row {index + 1} </div>
-              <button className="decrement"> - </button>
-              <div className="row-quantity"> {rowQuantity} </div>
-              <button className="increment"> + </button>
+              <button className="decrement"
+                onClick={function() {props.onRowChange(index, -1);}}> - </button>
+              <div className="row-quantity"> {num} </div>
+              <button className="increment"
+                onClick={function() {props.onRowChange(index, 1);}}> + </button>
             </div>
           );
         })}
@@ -79,7 +79,7 @@ function Options(props) {
 var Application = React.createClass({
   propTypes: {
     initialBoard: React.PropTypes.arrayOf(React.PropTypes.number),
-    rowQuantity: React.PropTypes.number,
+    initialRows: React.PropTypes.arrayOf(React.PropTypes.number),
     opponent: React.PropTypes.string,
     startingPlayer: React.PropTypes.number,
   },
@@ -87,7 +87,7 @@ var Application = React.createClass({
   getDefaultProps: function() {
     return {
       initialBoard: [3,4,5,0],
-      rowQuantity: 4,
+      initialRows: [4,5,6,0],
       opponent: "Computer",
       startingPlayer: 1,
     };
@@ -96,8 +96,27 @@ var Application = React.createClass({
   getInitialState: function() {
     return {
       board: this.props.initialBoard,
+      rows: this.props.initialRows,
       currentPlayer: this.props.startingPlayer,
     }
+  },
+
+  // Not used yet
+  onMove: function(move) {
+    this.state.board[move[0]] -= move[1];
+    this.setState(this.state);
+  },
+
+  // Not used yet
+  onRowChange: function(index, delta) {
+    this.state.rows[index] += delta;
+    this.setState(this.state);
+  },
+
+  // Not used yet
+  onRestart: function() {
+    this.state.board = this.state.rows;
+    this.setState(this.state);
   },
 
   render: function() {
@@ -109,7 +128,10 @@ var Application = React.createClass({
           board={this.state.board}
           currentPlayer={this.state.currentPlayer}
         />
-        <Options initialBoard={this.props.initialBoard}/>
+        <Options
+          rows={this.state.rows}
+          onRowChange={function(index, delta) {this.onRowChange(index, delta)}.bind(this)}
+        />
       </div>
     );
   }
