@@ -30,7 +30,7 @@ function Game(props) {
           );
         })}
       </div>
-      <button id="move">Move</button>
+      <button id="move" onClick={function() {props.move();}}>Move</button>
     </div>
   );
 }
@@ -121,9 +121,10 @@ var Application = React.createClass({
     this.setState(this.state);
   },
 
-  // Not used yet
   onMove: function(move) {
-    // this.state.board[move[0]] -= move[1];
+    this.state.board = this.state.board.map(function(row) {
+      return row.filter(function(token) {return token == 0});
+    });
     this.setState(this.state);
   },
 
@@ -152,6 +153,7 @@ var Application = React.createClass({
           currentPlayer={this.state.currentPlayer}
           toggleToken={function(row, index)
             {this.toggleToken(row, index)}.bind(this)}
+          move={this.onMove}
         />
         <Options
           rows={this.state.rows}
