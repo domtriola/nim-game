@@ -37,7 +37,7 @@ body {
   display: inline-block;
   margin: 4px;
 }
-.token[data-chosen=true] {
+.token.chosen {
   background-color: orange;
 }
 .token:hover {

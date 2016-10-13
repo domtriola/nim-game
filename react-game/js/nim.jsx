@@ -23,8 +23,11 @@ function Game(props) {
     <div id="game">
       <div class="player-turn">Player {props.currentPlayer}{apos}s Turn</div>
       <div className="board">
-        {props.board.map(function(row) {
-          return <Row row={row}/>;
+        {props.board.map(function(row, rowIndex) {
+          return (
+            <Row row={row} toggleToken={function(index)
+              {props.toggleToken(rowIndex, index)}}/>
+          );
         })}
       </div>
       <button id="move">Move</button>
@@ -34,7 +37,11 @@ function Game(props) {
 function Row(props) {
   var tokens = [];
   for (var i = 0; i < props.row.length; i++)
-    tokens.push(<Token selected={props.row[i]}/>);
+    tokens.push(
+      <Token selected={props.row[i]}
+        index = {i}
+      toggle={props.toggleToken}/>
+    );
   return (
     <div className="row">
       {tokens}
@@ -42,10 +49,13 @@ function Row(props) {
   );
 }
 function Token(props) {
-  if (props.selected)
-    return <div className="token chosen"></div>;
-  else
-    return <div className="token"></div>
+  if (props.selected) {
+    return (<div className="token chosen"
+      onClick={function() {props.toggle(props.index);}}></div>);
+  } else {
+    return (<div className="token"
+      onClick={function() {props.toggle(props.index);}}></div>);
+  }
 }
 
 function Options(props) {
@@ -106,14 +116,14 @@ var Application = React.createClass({
     }
   },
 
-  // Not used yet
-  toggleToken: function(move) {
-
+  toggleToken: function(row, index) {
+    this.state.board[row][index] = this.state.board[row][index] == 0 ? 1 : 0;
+    this.setState(this.state);
   },
 
   // Not used yet
   onMove: function(move) {
-    this.state.board[move[0]] -= move[1];
+    // this.state.board[move[0]] -= move[1];
     this.setState(this.state);
   },
 
@@ -140,6 +150,8 @@ var Application = React.createClass({
           opponent={this.props.opponent}
           board={this.state.board}
           currentPlayer={this.state.currentPlayer}
+          toggleToken={function(row, index)
+            {this.toggleToken(row, index)}.bind(this)}
         />
         <Options
           rows={this.state.rows}
