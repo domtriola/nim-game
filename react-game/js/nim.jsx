@@ -70,7 +70,9 @@ function Options(props) {
             </div>
           );
         })}
-        <button id="restart">Restart</button>
+        <button id="restart" onClick={function() {props.onRestart();}}>
+          Restart
+        </button>
       </div>
     </div>
   );
@@ -102,20 +104,23 @@ var Application = React.createClass({
   },
 
   // Not used yet
+  toggleToken: function(move) {
+
+  },
+
+  // Not used yet
   onMove: function(move) {
     this.state.board[move[0]] -= move[1];
     this.setState(this.state);
   },
 
-  // Not used yet
   onRowChange: function(index, delta) {
     this.state.rows[index] += delta;
     this.setState(this.state);
   },
 
-  // Not used yet
   onRestart: function() {
-    this.state.board = this.state.rows;
+    this.state.board = this.state.rows.slice(0);
     this.setState(this.state);
   },
 
@@ -130,7 +135,9 @@ var Application = React.createClass({
         />
         <Options
           rows={this.state.rows}
-          onRowChange={function(index, delta) {this.onRowChange(index, delta)}.bind(this)}
+          onRowChange={function(index, delta)
+            {this.onRowChange(index, delta)}.bind(this)}
+          onRestart={this.onRestart}
         />
       </div>
     );
