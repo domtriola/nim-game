@@ -23,8 +23,8 @@ function Game(props) {
     <div id="game">
       <div class="player-turn">Player {props.currentPlayer}{apos}s Turn</div>
       <div className="board">
-        {props.board.map(function(rowQuantity) {
-          return <Row quantity={rowQuantity}/>;
+        {props.board.map(function(row) {
+          return <Row row={row}/>;
         })}
       </div>
       <button id="move">Move</button>
@@ -33,18 +33,19 @@ function Game(props) {
 }
 function Row(props) {
   var tokens = [];
-  for (var i = 0; i < props.quantity; i++)
-    tokens.push(<Token />);
+  for (var i = 0; i < props.row.length; i++)
+    tokens.push(<Token selected={props.row[i]}/>);
   return (
     <div className="row">
       {tokens}
     </div>
   );
 }
-function Token() {
-  return (
-    <div is data-chosen="false" class="token"></div>
-  );
+function Token(props) {
+  if (props.selected)
+    return <div className="token chosen"></div>;
+  else
+    return <div className="token"></div>
 }
 
 function Options(props) {
@@ -88,7 +89,9 @@ var Application = React.createClass({
 
   getDefaultProps: function() {
     return {
-      initialBoard: [3,4,5,0],
+      initialBoard: [[0,0,0],
+                     [0,0,0,0],
+                     [0,0,0,0,0]],
       initialRows: [4,5,6,0],
       opponent: "Computer",
       startingPlayer: 1,
@@ -120,7 +123,12 @@ var Application = React.createClass({
   },
 
   onRestart: function() {
-    this.state.board = this.state.rows.slice(0);
+    this.state.board = this.state.rows.map(function(qty) {
+      var row = [];
+      for (var i = 0; i < qty; i++)
+        row.push(0);
+      return row;
+    });
     this.setState(this.state);
   },
 
