@@ -1,3 +1,17 @@
+function Cover(props) {
+  var humanStyle = {};
+  var compStyle = {
+    position: 'absolute',
+    width: '500px',
+    height: '500px',
+  };
+  var coverStyle = props.currentPlayer.type == "Computer" ? compStyle : humanStyle;
+
+  return (
+    <div style={coverStyle}></div>
+  );
+}
+
 function Header(props) {
   return (
     <div className="header">
@@ -177,6 +191,7 @@ var Application = React.createClass({
   render: function() {
     return (
       <div className="wrapper">
+        <Cover currentPlayer={this.state.currentPlayer}/>
         <Header opponent={this.state.playerTwo.type}/>
         <Game
           board={this.state.board}
