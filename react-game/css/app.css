@@ -56,3 +56,8 @@ body {
   display: inline-block;
   margin: 5px;
 }
+
+.opponent-choice button.selected {
+  background-color: #771f1f;
+  color: #fff;
+}

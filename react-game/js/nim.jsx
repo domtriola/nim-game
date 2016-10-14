@@ -1,13 +1,3 @@
-// Structure
-
-// Game board with tokens that can be reset
-//   - tokens toggle chosen or not
-
-// Controls
-//   - chose move
-//   - set # of tokens per row
-//   - allow player to play against another player
-
 function Header(props) {
   return (
     <div className="header">
@@ -19,13 +9,18 @@ function Header(props) {
 
 function Game(props) {
   var apos = "'"; // hack to avoid atom highlighting bug
+  var rowCounter = 1;
+  function rowId() {
+    return rowCounter++;
+  }
+
   return (
     <div id="game">
-      <div class="player-turn">Player {props.currentPlayer}{apos}s Turn</div>
+      <div className="player-turn">Player {props.currentPlayer.id}{apos}s Turn</div>
       <div className="board">
         {props.board.map(function(row, rowIndex) {
           return (
-            <Row row={row} toggleToken={function(index)
+            <Row row={row} key={rowId()} toggleToken={function(index)
               {props.toggleToken(rowIndex, index)}}/>
           );
         })}
@@ -36,11 +31,18 @@ function Game(props) {
 }
 function Row(props) {
   var tokens = [];
+  var tokenCounter = 1;
+  function tokenId() {
+    return tokenCounter++;
+  }
   for (var i = 0; i < props.row.length; i++)
     tokens.push(
-      <Token selected={props.row[i]}
-        index = {i}
-      toggle={props.toggleToken}/>
+      <Token
+        key={tokenId()}
+        selected={props.row[i]}
+        index={i}
+        toggle={props.toggleToken}
+      />
     );
   return (
     <div className="row">
@@ -49,51 +51,62 @@ function Row(props) {
   );
 }
 function Token(props) {
-  if (props.selected) {
-    return (<div className="token chosen"
-      onClick={function() {props.toggle(props.index);}}></div>);
-  } else {
-    return (<div className="token"
-      onClick={function() {props.toggle(props.index);}}></div>);
-  }
+  return (
+    <div className={"token" + (props.selected ? " chosen" : "")}
+    onClick={function() {props.toggle(props.index);}}></div>
+  );
 }
 
 function Options(props) {
+  var optRowCounter = 1;
+  function optRowId() {
+    return optRowCounter++;
+  }
   return (
     <div id="options">
       <div className="setup">
         <div className="choose-opponent">
           <div>Choose Opponent: </div>
-          <div className="opponent-choice">
-            <button>Human</button>
-            <button>Computer</button>
-          </div>
+          <OpponentButtons playerTwo={props.playerTwo} />
         </div>
         {props.rows.map(function(num, index) {
           return (
-            <div className="row">
-              <div className="row-number"> Row {index + 1} </div>
-              <button className="decrement"
-                onClick={function() {props.onRowChange(index, -1);}}> - </button>
-              <div className="row-quantity"> {num} </div>
-              <button className="increment"
-                onClick={function() {props.onRowChange(index, 1);}}> + </button>
-            </div>
+            <OptionRow key={optRowId()} num={num} index={index}
+            onRowChange={props.onRowChange}/>
           );
         })}
-        <button id="restart" onClick={function() {props.onRestart();}}>
-          Restart
-        </button>
+        <button id="restart" onClick={function() {props.onRestart();}}>Restart</button>
       </div>
+    </div>
+  );
+}
+function OpponentButtons(props) {
+  var type = props.playerTwo.type;
+  return (
+    <div className="opponent-choice">
+      <button className={type == "Human" ? "selected" : " "}>Human</button>
+      <button className={type == "Computer" ? "selected" : " "}>Computer</button>
+    </div>
+  );
+}
+function OptionRow(props) {
+  return (
+    <div className="row">
+      <div className="row-number"> Row {props.index + 1} </div>
+      <button className="decrement"
+        onClick={function() {props.onRowChange(props.index, -1);}}> - </button>
+      <div className="row-quantity"> {props.num} </div>
+      <button className="increment"
+        onClick={function() {props.onRowChange(props.index, 1);}}> + </button>
     </div>
   );
 }
 
 var Application = React.createClass({
   propTypes: {
-    initialBoard: React.PropTypes.arrayOf(React.PropTypes.number),
+    initialBoard: React.PropTypes.arrayOf(
+      React.PropTypes.arrayOf(React.PropTypes.number)),
     initialRows: React.PropTypes.arrayOf(React.PropTypes.number),
-    opponent: React.PropTypes.string,
     startingPlayer: React.PropTypes.number,
   },
 
@@ -103,8 +116,8 @@ var Application = React.createClass({
                      [0,0,0,0],
                      [0,0,0,0,0]],
       initialRows: [4,5,6,0],
-      opponent: "Computer",
-      startingPlayer: 1,
+      playerOne: {id: 1, type: "Human"},
+      playerTwo: {id: 2, type: "Human"},
     };
   },
 
@@ -112,7 +125,7 @@ var Application = React.createClass({
     return {
       board: this.props.initialBoard,
       rows: this.props.initialRows,
-      currentPlayer: this.props.startingPlayer,
+      currentPlayer: this.props.playerOne,
     }
   },
 
@@ -125,6 +138,15 @@ var Application = React.createClass({
     this.state.board = this.state.board.map(function(row) {
       return row.filter(function(token) {return token == 0});
     });
+    if (this.state.currentPlayer.id == 1)
+      this.state.currentPlayer = this.props.playerTwo;
+    else
+      this.state.currentPlayer = this.props.playerOne;
+    this.setState(this.state);
+  },
+
+  onOpponentChange: function(type) {
+    this.state.playerTwo.type = type;
     this.setState(this.state);
   },
 
@@ -148,7 +170,6 @@ var Application = React.createClass({
       <div className="wrapper">
         <Header opponent={this.props.opponent}/>
         <Game
-          opponent={this.props.opponent}
           board={this.state.board}
           currentPlayer={this.state.currentPlayer}
           toggleToken={function(row, index)
@@ -156,6 +177,9 @@ var Application = React.createClass({
           move={this.onMove}
         />
         <Options
+          playerTwo={this.props.playerTwo}
+          onOpponentChange={function(type)
+            {this.onOpponentChange(type)}.bind(this)}
           rows={this.state.rows}
           onRowChange={function(index, delta)
             {this.onRowChange(index, delta)}.bind(this)}
