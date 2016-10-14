@@ -53,8 +53,13 @@ body {
 }
 
 .opponent-choice button {
+  background-color: #eee;
   display: inline-block;
   margin: 5px;
+}
+
+.opponent-choice button:focus {
+  outline: none;
 }
 
 .opponent-choice button.selected {

@@ -67,7 +67,10 @@ function Options(props) {
       <div className="setup">
         <div className="choose-opponent">
           <div>Choose Opponent: </div>
-          <OpponentButtons playerTwo={props.playerTwo} />
+          <OpponentButtons
+            playerTwo={props.playerTwo}
+            onOpponentChange={props.onOpponentChange}
+          />
         </div>
         {props.rows.map(function(num, index) {
           return (
@@ -82,10 +85,15 @@ function Options(props) {
 }
 function OpponentButtons(props) {
   var type = props.playerTwo.type;
+  var changeOpponent = function(opponentType) {
+    props.onOpponentChange(opponentType);
+  }
   return (
     <div className="opponent-choice">
-      <button className={type == "Human" ? "selected" : " "}>Human</button>
-      <button className={type == "Computer" ? "selected" : " "}>Computer</button>
+      <button className={type == "Human" ? "selected" : " "}
+        onClick={function() {changeOpponent("Human")}}>Human</button>
+      <button className={type == "Computer" ? "selected" : " "}
+        onClick={function() {changeOpponent("Computer")}}>Computer</button>
     </div>
   );
 }
@@ -114,10 +122,10 @@ var Application = React.createClass({
     return {
       initialBoard: [[0,0,0],
                      [0,0,0,0],
-                     [0,0,0,0,0]],
+                     [0,0,0,0,0],
+                     []],
       initialRows: [4,5,6,0],
       playerOne: {id: 1, type: "Human"},
-      playerTwo: {id: 2, type: "Human"},
     };
   },
 
@@ -126,6 +134,7 @@ var Application = React.createClass({
       board: this.props.initialBoard,
       rows: this.props.initialRows,
       currentPlayer: this.props.playerOne,
+      playerTwo: {id: 2, type: "Human"}
     }
   },
 
@@ -139,7 +148,7 @@ var Application = React.createClass({
       return row.filter(function(token) {return token == 0});
     });
     if (this.state.currentPlayer.id == 1)
-      this.state.currentPlayer = this.props.playerTwo;
+      this.state.currentPlayer = this.state.playerTwo;
     else
       this.state.currentPlayer = this.props.playerOne;
     this.setState(this.state);
@@ -168,7 +177,7 @@ var Application = React.createClass({
   render: function() {
     return (
       <div className="wrapper">
-        <Header opponent={this.props.opponent}/>
+        <Header opponent={this.state.playerTwo.type}/>
         <Game
           board={this.state.board}
           currentPlayer={this.state.currentPlayer}
@@ -177,7 +186,7 @@ var Application = React.createClass({
           move={this.onMove}
         />
         <Options
-          playerTwo={this.props.playerTwo}
+          playerTwo={this.state.playerTwo}
           onOpponentChange={function(type)
             {this.onOpponentChange(type)}.bind(this)}
           rows={this.state.rows}
