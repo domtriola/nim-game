@@ -244,7 +244,7 @@ var Application = React.createClass({
       board: this.props.initialBoard,
       rows: this.props.initialRows,
       currentPlayer: this.props.playerOne,
-      playerTwo: {id: 2, type: "Human"}
+      playerTwo: {id: 2, type: "Human"},
     }
   },
 
@@ -286,15 +286,21 @@ var Application = React.createClass({
     this.setState(this.state);
   },
 
+  delayedToggle: function(row, i) {
+    var interval = i * 500 + 500;
+    setTimeout(function() {
+      this.toggleToken(row, i)
+    }.bind(this), interval);
+  },
+
   playCompTurn: function() {
     var board = this.state.board.map(function(row) {
       return row.length;
     });
     var bestMove = getBestMove(board);
-    for (var i = 0; i < bestMove[1]; i++) {
-      this.toggleToken(bestMove[0], i);
-    }
-    this.onMove();
+    for (var i = 0; i < bestMove[1]; i++)
+      this.delayedToggle(bestMove[0], i);
+    setTimeout(function() {this.onMove();}.bind(this), bestMove[1] * 500 + 600);
   },
 
   render: function() {
