@@ -260,24 +260,40 @@ var Application = React.createClass({
   },
 
   onMove: function() {
-    this.state.board = this.state.board.map(function(row) {
-      return row.filter(function(token) {return token == 0});
-    });
-
     function empty(array) {
-      return array.length == 0;
+      return !array.length;
     }
-    if (this.state.board.every(empty))
-      this.setState({ over: true });
-    else {
-      if (this.state.currentPlayer.id == 1)
-        this.state.currentPlayer = this.state.playerTwo;
-      else
-        this.state.currentPlayer = this.props.playerOne;
-      this.setState(this.state);
+    function notEmpty(array) {
+      return !!array.length;
+    }
+    function isOne(num) {
+      return num == 1;
+    }
+    var chosenTokens = this.state.board.map(function(row) {
+      return row.filter(isOne);
+    }).filter(notEmpty);
 
-      if (this.state.currentPlayer.type == "Computer")
-        this.playCompTurn();
+    if (empty(chosenTokens))
+      alert("You must chose at least one token");
+    else if (chosenTokens.length > 1)
+      alert("You cannot chose from more than one row");
+    else {
+      this.state.board = this.state.board.map(function(row) {
+        return row.filter(function(token) {return token == 0});
+      });
+
+      if (this.state.board.every(empty))
+        this.setState({ over: true });
+      else {
+        if (this.state.currentPlayer.id == 1)
+          this.state.currentPlayer = this.state.playerTwo;
+        else
+          this.state.currentPlayer = this.props.playerOne;
+        this.setState(this.state);
+
+        if (this.state.currentPlayer.type == "Computer")
+          this.playCompTurn();
+      }
     }
   },
 
