@@ -1,3 +1,43 @@
+function nimSum(nums) {
+  var binaryNums = [];
+  var paddedNums = [];
+  var maxLength = 0;
+  nums.forEach(function(num) {
+    binaryNums.push(num.toString(2));
+  });
+  binaryNums.forEach(function(num) {
+    if (num.length > maxLength)
+      maxLength = num.length;
+  });
+  binaryNums.forEach(function(num) {
+    paddedNums.push(pad(num, maxLength));
+  });
+  var result = null;
+  paddedNums.forEach(function(num) {
+    if (result == null)
+      result = num;
+    else {
+      for (var i = 0; i < num.length; i++) {
+        if (num[i] == "1") {
+          if (result[i] == "0")
+            result = result.replaceAt(i, "1");
+          else
+            result = result.replaceAt(i, "0");
+        }
+      }
+    }
+  });
+  return parseInt(result, 2);
+}
+function pad(string, length) {
+  while (string.length < length)
+    string = "0" + string;
+  return string;
+}
+String.prototype.replaceAt = function(index, char) {
+  return this.substr(0, index) + char + this.substr(index + 1);
+}
+
 function Cover(props) {
   var humanStyle = {};
   var compStyle = {
@@ -157,7 +197,7 @@ var Application = React.createClass({
     this.setState(this.state);
   },
 
-  onMove: function(move) {
+  onMove: function() {
     this.state.board = this.state.board.map(function(row) {
       return row.filter(function(token) {return token == 0});
     });
@@ -166,6 +206,8 @@ var Application = React.createClass({
     else
       this.state.currentPlayer = this.props.playerOne;
     this.setState(this.state);
+    if (this.state.currentPlayer.type == "Computer")
+      this.playCompTurn();
   },
 
   onOpponentChange: function(type) {
@@ -186,6 +228,14 @@ var Application = React.createClass({
       return row;
     });
     this.setState(this.state);
+  },
+
+  playCompTurn: function() {
+    var board = this.state.board.map(function(row) {
+      return row.length;
+    });
+    console.log(nimSum(board));
+    this.onMove();
   },
 
   render: function() {
