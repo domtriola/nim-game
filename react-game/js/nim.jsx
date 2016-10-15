@@ -306,8 +306,11 @@ var Nim = React.createClass({
   },
 
   onRowChange: function(index, delta) {
-    this.state.rows[index] += delta;
-    this.setState(this.state);
+    var newValue = this.state.rows[index] + delta;
+    if (newValue > -1 && newValue < 9) {
+      this.state.rows[index] = newValue;
+      this.setState(this.state);
+    }
   },
 
   onRestart: function() {
