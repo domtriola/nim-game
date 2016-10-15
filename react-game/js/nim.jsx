@@ -317,7 +317,7 @@ var Nim = React.createClass({
         row.push(0);
       return row;
     });
-    this.state.playerTwo = this.state.selectedOpponent;
+    this.state.playerTwo = {id: 2, type: this.state.selectedOpponent.type};
     this.state.currentPlayer = this.props.playerOne;
     this.state.over = false;
     this.setState(this.state);
