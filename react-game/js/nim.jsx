@@ -178,7 +178,7 @@ function Options(props) {
         <div className="choose-opponent">
           <div>Choose Opponent: </div>
           <OpponentButtons
-            playerTwo={props.playerTwo}
+            selectedOpponent={props.selectedOpponent}
             onOpponentChange={props.onOpponentChange}
           />
         </div>
@@ -194,7 +194,7 @@ function Options(props) {
   );
 }
 function OpponentButtons(props) {
-  var type = props.playerTwo.type;
+  var type = props.selectedOpponent.type;
   var changeOpponent = function(opponentType) {
     props.onOpponentChange(opponentType);
   }
@@ -245,6 +245,7 @@ var Application = React.createClass({
       rows: this.props.initialRows,
       currentPlayer: this.props.playerOne,
       playerTwo: {id: 2, type: "Human"},
+      selectedOpponent: {id: 2, type: "Human"}
     }
   },
 
@@ -267,7 +268,7 @@ var Application = React.createClass({
   },
 
   onOpponentChange: function(type) {
-    this.state.playerTwo.type = type;
+    this.state.selectedOpponent.type = type;
     this.setState(this.state);
   },
 
@@ -283,6 +284,7 @@ var Application = React.createClass({
         row.push(0);
       return row;
     });
+    this.state.playerTwo = this.state.selectedOpponent;
     this.setState(this.state);
   },
 
@@ -316,7 +318,7 @@ var Application = React.createClass({
           move={this.onMove}
         />
         <Options
-          playerTwo={this.state.playerTwo}
+          selectedOpponent={this.state.selectedOpponent}
           onOpponentChange={function(type)
             {this.onOpponentChange(type)}.bind(this)}
           rows={this.state.rows}
