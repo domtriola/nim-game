@@ -101,7 +101,9 @@ function Cover(props) {
     width: '500px',
     height: '500px',
   };
-  var coverStyle = props.currentPlayer.type == "Computer" ? compStyle : humanStyle;
+  var coverStyle = props.currentPlayer.type == "Computer" && !(props.over)
+    ? compStyle
+    : humanStyle;
 
   return (
     <div style={coverStyle}></div>
@@ -118,7 +120,7 @@ function Header(props) {
 }
 
 function Game(props) {
-  var apos = "'"; // hack to avoid atom highlighting bug
+  var otherPlayerId = props.currentPlayer.id == 1 ? 2 : 1;
   var rowCounter = 1;
   function rowId() {
     return rowCounter++;
@@ -126,7 +128,10 @@ function Game(props) {
 
   return (
     <div id="game">
-      <div className="player-turn">Player {props.currentPlayer.id}{apos}s Turn</div>
+      <div className="board-header">
+        {props.over ? "Player " + otherPlayerId + " Wins!"
+          : "Player " + props.currentPlayer.id + "'s Turn"}
+      </div>
       <div className="board">
         {props.board.map(function(row, rowIndex) {
           return (
@@ -225,7 +230,6 @@ var Application = React.createClass({
     initialBoard: React.PropTypes.arrayOf(
       React.PropTypes.arrayOf(React.PropTypes.number)),
     initialRows: React.PropTypes.arrayOf(React.PropTypes.number),
-    startingPlayer: React.PropTypes.number,
   },
 
   getDefaultProps: function() {
@@ -234,7 +238,7 @@ var Application = React.createClass({
                      [0,0,0,0],
                      [0,0,0,0,0],
                      []],
-      initialRows: [4,5,6,0],
+      initialRows: [3,4,5,0],
       playerOne: {id: 1, type: "Human"},
     };
   },
@@ -245,7 +249,8 @@ var Application = React.createClass({
       rows: this.props.initialRows,
       currentPlayer: this.props.playerOne,
       playerTwo: {id: 2, type: "Human"},
-      selectedOpponent: {id: 2, type: "Human"}
+      selectedOpponent: {id: 2, type: "Human"},
+      over: false,
     }
   },
 
@@ -258,13 +263,22 @@ var Application = React.createClass({
     this.state.board = this.state.board.map(function(row) {
       return row.filter(function(token) {return token == 0});
     });
-    if (this.state.currentPlayer.id == 1)
-      this.state.currentPlayer = this.state.playerTwo;
-    else
-      this.state.currentPlayer = this.props.playerOne;
-    this.setState(this.state);
-    if (this.state.currentPlayer.type == "Computer")
-      this.playCompTurn();
+
+    function empty(array) {
+      return array.length == 0;
+    }
+    if (this.state.board.every(empty))
+      this.setState({ over: true });
+    else {
+      if (this.state.currentPlayer.id == 1)
+        this.state.currentPlayer = this.state.playerTwo;
+      else
+        this.state.currentPlayer = this.props.playerOne;
+      this.setState(this.state);
+
+      if (this.state.currentPlayer.type == "Computer")
+        this.playCompTurn();
+    }
   },
 
   onOpponentChange: function(type) {
@@ -285,6 +299,8 @@ var Application = React.createClass({
       return row;
     });
     this.state.playerTwo = this.state.selectedOpponent;
+    this.state.currentPlayer = this.props.playerOne;
+    this.state.over = false;
     this.setState(this.state);
   },
 
@@ -308,7 +324,7 @@ var Application = React.createClass({
   render: function() {
     return (
       <div className="wrapper">
-        <Cover currentPlayer={this.state.currentPlayer}/>
+        <Cover currentPlayer={this.state.currentPlayer} over={this.state.over}/>
         <Header opponent={this.state.playerTwo.type}/>
         <Game
           board={this.state.board}
@@ -316,6 +332,7 @@ var Application = React.createClass({
           toggleToken={function(row, index)
             {this.toggleToken(row, index)}.bind(this)}
           move={this.onMove}
+          over={this.state.over}
         />
         <Options
           selectedOpponent={this.state.selectedOpponent}
