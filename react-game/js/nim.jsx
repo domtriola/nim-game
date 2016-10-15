@@ -225,7 +225,7 @@ function OptionRow(props) {
   );
 }
 
-var Application = React.createClass({
+var Nim = React.createClass({
   propTypes: {
     initialBoard: React.PropTypes.arrayOf(
       React.PropTypes.arrayOf(React.PropTypes.number)),
@@ -359,9 +359,14 @@ var Application = React.createClass({
             {this.onRowChange(index, delta)}.bind(this)}
           onRestart={this.onRestart}
         />
+        <div className="description">
+          Each turn you may select any number of tokens to remove from one row.
+          This is a misere version of nim, meaning the player to take the last
+          token loses.
+        </div>
       </div>
     );
   }
 });
 
-ReactDOM.render(<Application />, document.getElementById("container"));
+ReactDOM.render(<Nim />, document.getElementById("container"));
