@@ -1,3 +1,6 @@
+/* Helper Functions
+------------------------------*/
+
 function nimSum(nums) {
   var binaryNums = [];
   var paddedNums = [];
@@ -37,6 +40,59 @@ function pad(string, length) {
 String.prototype.replaceAt = function(index, char) {
   return this.substr(0, index) + char + this.substr(index + 1);
 }
+
+function isBestMove(board, move) {
+  var board = board.slice(0);
+  board[move[0]] -= move[1];
+  board = board.filter(greaterThanZero);
+  if (board.every(equalsOne))
+    return board.length % 2 ? true : false;
+  else if (board.reduce(sum) == 1)
+    return true;
+  else
+    return false;
+}
+function greaterThanZero(num) {
+  return num > 0;
+}
+function equalsOne(num) {
+  return num == 1;
+}
+function sum(a, b) {
+  return a + b;
+}
+
+function makesZeroSum(board, move) {
+  var board = board.slice(0);
+  board[move[0]] -= move[1];
+  if (nimSum(board) == 0)
+    return true;
+  return false;
+}
+
+function getBestMove(board) {
+  var allMoves = [], zeroSumMoves = [];
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 1; j <= board[i]; j++) {
+      var move = [i,j];
+      allMoves.push(move);
+      if (makesZeroSum(board, move))
+        zeroSumMoves.push(move);
+    }
+  }
+  for (var i = 0; i < allMoves.length; i++) {
+    if (isBestMove(board, allMoves[i]))
+      return allMoves[i];
+  }
+  if (zeroSumMoves.length < 1)
+    return allMoves[Math.floor(Math.random() * allMoves.length)];
+  else
+    return zeroSumMoves[Math.floor(Math.random() * zeroSumMoves.length)];
+}
+
+
+/* Application Components
+------------------------------*/
 
 function Cover(props) {
   var humanStyle = {};
@@ -234,7 +290,10 @@ var Application = React.createClass({
     var board = this.state.board.map(function(row) {
       return row.length;
     });
-    console.log(nimSum(board));
+    var bestMove = getBestMove(board);
+    for (var i = 0; i < bestMove[1]; i++) {
+      this.toggleToken(bestMove[0], i);
+    }
     this.onMove();
   },
 
