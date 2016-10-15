@@ -140,7 +140,10 @@ function Game(props) {
           );
         })}
       </div>
-      <button id="move" onClick={function() {props.move();}}>Move</button>
+      {props.over
+        ? <button onClick={function() {props.onRestart();}}>Play Again</button>
+        : <button onClick={function() {props.move();}}>Move</button>
+      }
     </div>
   );
 }
@@ -348,6 +351,7 @@ var Nim = React.createClass({
           toggleToken={function(row, index)
             {this.toggleToken(row, index)}.bind(this)}
           move={this.onMove}
+          onRestart={this.onRestart}
           over={this.state.over}
         />
         <Options
