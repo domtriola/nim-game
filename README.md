@@ -14,12 +14,12 @@ play perfectly (when winning moves are available to it).
 ## To Play the JavaScript Version ##
 
 * Download the repository
-* Open browser-game/index.html in your favorite browser
+* Open javascript-game/index.html in your favorite browser
 
 ## To Play the Ruby Version ##
 
 * Download the repository
-* Navigate to the ruby-console-game/ directory in the terminal
+* Navigate to the ruby-game/ directory in the terminal
 * Run the play.rb file with Ruby:
   ```
   ruby play.rb
