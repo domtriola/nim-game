@@ -12,28 +12,39 @@ import {
   View
 } from 'react-native';
 
+class Row extends Component {
+  render() {
+    return (
+      <View style={styles.row}>
+        {this.props.row.map(token => <Token />)}
+      </View>
+    );
+  }
+}
+
+class Token extends Component {
+  render() {
+    return (
+      <View style={styles.token}></View>
+    );
+  }
+}
+
 export default class Nim extends Component {
+  constructor(props) {
+    super(props);
+    const board = [[0,0,0],
+                   [0,0,0,0],
+                   [0,0,0,0,0]];
+    this.state = {
+      board: board,
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-          <View style={styles.token}></View>
-        </View>
+        {this.state.board.map(row => <Row row={row} />)}
       </View>
     );
   }
