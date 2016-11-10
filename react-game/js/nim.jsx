@@ -259,6 +259,7 @@ var Nim = React.createClass({
                      [0,0,0,0],
                      [0,0,0,0,0],
                      []],
+      initialRows: [3, 4, 5, 0],
       playerOne: {id: 1, type: "Human"},
       difficulties: [
         {
@@ -354,6 +355,7 @@ var Nim = React.createClass({
 
   setBoard: function(board) {
     this.state.board = board.map(function(row) { return row.slice(); });
+    this.state.rows = board.map(function(row) { return row.length; });
     this.state.playerTwo = {id: 2, type: this.state.selectedOpponent.type};
     this.state.currentPlayer = this.props.playerOne;
     this.state.over = false;
