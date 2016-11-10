@@ -180,6 +180,10 @@ function Options(props) {
   function optRowId() {
     return optRowCounter++;
   }
+  var difficultyCounter = 1;
+  function difficultyId() {
+    return difficultyCounter++;
+  }
   return (
     <div id="options">
       <div className="setup">
@@ -190,10 +194,16 @@ function Options(props) {
             onOpponentChange={props.onOpponentChange}
           />
         </div>
-        {props.rows.map(function(num, index) {
+        {props.difficulties.map(function(difficulty) {
           return (
-            <OptionRow key={optRowId()} num={num} index={index}
-            onRowChange={props.onRowChange}/>
+            <DifficultyButton
+              key={difficultyId()}
+              difficulty={difficulty.name}
+              subtext={difficulty.subtext}
+              chosen={difficulty.chosen}
+              board={difficulty.board}
+              setBoard={props.setBoard}
+            />
           );
         })}
         <button id="restart" onClick={function() {props.onRestart();}}>Restart</button>
@@ -213,6 +223,14 @@ function OpponentButtons(props) {
       <button className={type == "Computer" ? "selected" : " "}
         onClick={function() {changeOpponent("Computer")}}>Computer</button>
     </div>
+  );
+}
+function DifficultyButton(props) {
+  return (
+    <button className="difficulty-button"
+      onClick={function() {props.setBoard(props.board);}}>
+      {props.difficulty}<span className="subtext"><br />({props.subtext})</span>
+    </button>
   );
 }
 function OptionRow(props) {
@@ -241,8 +259,36 @@ var Nim = React.createClass({
                      [0,0,0,0],
                      [0,0,0,0,0],
                      []],
-      initialRows: [3,4,5,0],
       playerOne: {id: 1, type: "Human"},
+      difficulties: [
+        {
+          name: "Easy",
+          subtext: "not really",
+          board: [[0,0,0],
+                  [0,0,0,0],
+                  [0,0,0,0,0],
+                  []],
+          chosen: true,
+        },
+        {
+          name: "Medium",
+          subtext: "relatively",
+          board: [[0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,0,0,0,0,0],
+                  []],
+          chosen: false,
+        },
+        {
+          name: "Hard",
+          subtext: "good luck",
+          board: [[0,0,0],
+                  [0,0,0,0],
+                  [0,0,0,0,0],
+                  [0,0,0,0,0,0]],
+          chosen: false,
+        }
+      ],
     };
   },
 
@@ -251,8 +297,9 @@ var Nim = React.createClass({
       board: this.props.initialBoard,
       rows: this.props.initialRows,
       currentPlayer: this.props.playerOne,
-      playerTwo: {id: 2, type: "Human"},
-      selectedOpponent: {id: 2, type: "Human"},
+      playerTwo: {id: 2, type: "Computer"},
+      selectedOpponent: {id: 2, type: "Computer"},
+      difficulties: this.props.difficulties,
       over: false,
     }
   },
@@ -277,9 +324,9 @@ var Nim = React.createClass({
     }).filter(notEmpty);
 
     if (empty(chosenTokens))
-      alert("You must chose at least one token");
+      alert("You must choose at least one token");
     else if (chosenTokens.length > 1)
-      alert("You cannot chose from more than one row");
+      alert("You cannot choose from more than one row");
     else {
       this.state.board = this.state.board.map(function(row) {
         return row.filter(function(token) {return token == 0});
@@ -302,6 +349,14 @@ var Nim = React.createClass({
 
   onOpponentChange: function(type) {
     this.state.selectedOpponent.type = type;
+    this.setState(this.state);
+  },
+
+  setBoard: function(board) {
+    this.state.board = board.map(function(row) { return row.slice(); });
+    this.state.playerTwo = {id: 2, type: this.state.selectedOpponent.type};
+    this.state.currentPlayer = this.props.playerOne;
+    this.state.over = false;
     this.setState(this.state);
   },
 
@@ -361,9 +416,16 @@ var Nim = React.createClass({
           selectedOpponent={this.state.selectedOpponent}
           onOpponentChange={function(type)
             {this.onOpponentChange(type)}.bind(this)}
+          difficulties={this.props.difficulties}
+          setBoard={function(board) {
+            this.setBoard(board)
+          }.bind(this)}
           rows={this.state.rows}
-          onRowChange={function(index, delta)
-            {this.onRowChange(index, delta)}.bind(this)}
+          onRowChange={
+            function(index, delta) {
+              this.onRowChange(index, delta)
+            }.bind(this)
+          }
           onRestart={this.onRestart}
         />
         <div className="description">

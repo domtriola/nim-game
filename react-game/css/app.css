@@ -5,6 +5,17 @@ body {
     font-family: fantasy;
 }
 
+button {
+  font-size: 18px;
+  padding: 10px 15px;
+  color: #fff;
+  background-color: #027383;
+  /*background-color: #771f1f;*/
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .wrapper {
   display: block;
   margin: 70px auto;
@@ -57,7 +68,7 @@ body {
 }
 
 .opponent-choice button {
-  background-color: #eee;
+  background-color: #777;
   display: inline-block;
   margin: 5px;
 }
@@ -67,6 +78,15 @@ body {
 }
 
 .opponent-choice button.selected {
-  background-color: #771f1f;
+  background-color: #027383;
   color: #fff;
+}
+
+.difficulty-button {
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.difficulty-button .subtext {
+  font-size: 12px;
 }
