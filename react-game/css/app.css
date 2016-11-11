@@ -9,17 +9,25 @@ button {
   font-size: 18px;
   padding: 10px 15px;
   color: #fff;
-  background-color: #027383;
-  /*background-color: #771f1f;*/
+  background-color: #004444;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
+button:focus {
+  outline: none;
+}
+
+button.chosen {
+  background-color: #027383;
+  color: #fff;
+}
+
 .wrapper {
   display: block;
   margin: 70px auto;
-  width: 500px;
+  width: 700px;
 }
 
 .header {
@@ -41,7 +49,11 @@ button {
 /* Game Board
 ---------------------------*/
 
-#game .row {
+.board {
+  margin-bottom: 20px;
+}
+
+.board .row {
   height: 32px;
 }
 .token {
@@ -67,24 +79,18 @@ button {
   margin: 5px 10px;
 }
 
-.opponent-choice button {
+.option-choices {
+  margin-bottom: 20px;
+}
+
+.option-choices button {
   background-color: #777;
   display: inline-block;
   margin: 5px;
 }
 
-.opponent-choice button:focus {
-  outline: none;
-}
-
-.opponent-choice button.selected {
-  background-color: #027383;
-  color: #fff;
-}
-
-.difficulty-button {
-  display: block;
-  margin: 0 auto 10px;
+.option-choices button.chosen {
+  background-color: #006666;
 }
 
 .difficulty-button .subtext {

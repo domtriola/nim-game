@@ -187,25 +187,28 @@ function Options(props) {
   return (
     <div id="options">
       <div className="setup">
-        <div className="choose-opponent">
+        <div className="option-choices">
           <div>Choose Opponent: </div>
           <OpponentButtons
             selectedOpponent={props.selectedOpponent}
             onOpponentChange={props.onOpponentChange}
           />
         </div>
-        {props.difficulties.map(function(difficulty) {
-          return (
-            <DifficultyButton
-              key={difficultyId()}
-              difficulty={difficulty.name}
-              subtext={difficulty.subtext}
-              chosen={difficulty.chosen}
-              board={difficulty.board}
-              setBoard={props.setBoard}
-            />
-          );
-        })}
+        <div className="option-choices">
+          <div>Choose Difficulty: </div>
+          {props.difficulties.map(function(difficulty) {
+            return (
+              <DifficultyButton
+                key={difficultyId()}
+                difficulty={difficulty.name}
+                subtext={difficulty.subtext}
+                chosen={difficulty.chosen}
+                board={difficulty.board}
+                setBoard={props.setBoard}
+              />
+            );
+          })}
+        </div>
         <button id="restart" onClick={function() {props.onRestart();}}>Restart</button>
       </div>
     </div>
@@ -218,17 +221,20 @@ function OpponentButtons(props) {
   }
   return (
     <div className="opponent-choice">
-      <button className={type == "Human" ? "selected" : " "}
+      <button className={type == "Human" ? "chosen" : " "}
         onClick={function() {changeOpponent("Human")}}>Human</button>
-      <button className={type == "Computer" ? "selected" : " "}
+      <button className={type == "Computer" ? "chosen" : " "}
         onClick={function() {changeOpponent("Computer")}}>Computer</button>
     </div>
   );
 }
 function DifficultyButton(props) {
+  var difficultyClasses = 'difficulty-button';
+  if (props.chosen)
+    difficultyClasses += ' chosen';
   return (
-    <button className="difficulty-button"
-      onClick={function() {props.setBoard(props.board);}}>
+    <button className={difficultyClasses}
+      onClick={function() {props.setBoard(props.board, props.difficulty);}}>
       {props.difficulty}<span className="subtext"><br />({props.subtext})</span>
     </button>
   );
@@ -274,19 +280,19 @@ var Nim = React.createClass({
         {
           name: "Medium",
           subtext: "relatively",
-          board: [[0,0,0,0],
-                  [0,0,0,0,0],
+          board: [[0,0,0,0,0],
                   [0,0,0,0,0,0],
+                  [0,0,0,0,0,0,0],
                   []],
           chosen: false,
         },
         {
           name: "Hard",
           subtext: "good luck",
-          board: [[0,0,0],
-                  [0,0,0,0],
-                  [0,0,0,0,0],
-                  [0,0,0,0,0,0]],
+          board: [[0,0,0,0,0],
+                  [0,0,0,0,0,0],
+                  [0,0,0,0,0,0,0],
+                  [0,0,0,0,0,0,0,0]],
           chosen: false,
         }
       ],
@@ -353,12 +359,14 @@ var Nim = React.createClass({
     this.setState(this.state);
   },
 
-  setBoard: function(board) {
-    this.state.board = board.map(function(row) { return row.slice(); });
+  setBoard: function(board, difficulty) {
+    for (var i = 0; i < this.props.difficulties.length; i++) {
+      if (this.props.difficulties[i].name == difficulty)
+        this.props.difficulties[i].chosen = true;
+      else
+        this.props.difficulties[i].chosen = false;
+    }
     this.state.rows = board.map(function(row) { return row.length; });
-    this.state.playerTwo = {id: 2, type: this.state.selectedOpponent.type};
-    this.state.currentPlayer = this.props.playerOne;
-    this.state.over = false;
     this.setState(this.state);
   },
 
@@ -419,8 +427,8 @@ var Nim = React.createClass({
           onOpponentChange={function(type)
             {this.onOpponentChange(type)}.bind(this)}
           difficulties={this.props.difficulties}
-          setBoard={function(board) {
-            this.setBoard(board)
+          setBoard={function(board, difficulty) {
+            this.setBoard(board, difficulty)
           }.bind(this)}
           rows={this.state.rows}
           onRowChange={
