@@ -176,10 +176,6 @@ function Token(props) {
 }
 
 function Options(props) {
-  var optRowCounter = 1;
-  function optRowId() {
-    return optRowCounter++;
-  }
   var difficultyCounter = 1;
   function difficultyId() {
     return difficultyCounter++;
@@ -237,18 +233,6 @@ function DifficultyButton(props) {
       onClick={function() {props.setBoard(props.board, props.difficulty);}}>
       {props.difficulty}<span className="subtext"><br />({props.subtext})</span>
     </button>
-  );
-}
-function OptionRow(props) {
-  return (
-    <div className="row">
-      <div className="row-number"> Row {props.index + 1} </div>
-      <button className="decrement"
-        onClick={function() {props.onRowChange(props.index, -1);}}> - </button>
-      <div className="row-quantity"> {props.num} </div>
-      <button className="increment"
-        onClick={function() {props.onRowChange(props.index, 1);}}> + </button>
-    </div>
   );
 }
 
@@ -370,14 +354,6 @@ var Nim = React.createClass({
     this.setState(this.state);
   },
 
-  onRowChange: function(index, delta) {
-    var newValue = this.state.rows[index] + delta;
-    if (newValue > -1 && newValue < 9) {
-      this.state.rows[index] = newValue;
-      this.setState(this.state);
-    }
-  },
-
   onRestart: function() {
     this.state.board = this.state.rows.map(function(qty) {
       var row = [];
@@ -430,12 +406,6 @@ var Nim = React.createClass({
           setBoard={function(board, difficulty) {
             this.setBoard(board, difficulty)
           }.bind(this)}
-          rows={this.state.rows}
-          onRowChange={
-            function(index, delta) {
-              this.onRowChange(index, delta)
-            }.bind(this)
-          }
           onRestart={this.onRestart}
         />
         <div className="description">
