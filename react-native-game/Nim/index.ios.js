@@ -1,22 +1,45 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight
 } from 'react-native';
+
+class Board extends Component {
+  render() {
+    var rowCount = 0;
+    function rowId() {
+      return rowCount++;
+    }
+    return (
+      <View style={styles.container}>
+        {this.props.board.map(row => <Row key={rowId()} row={row} />)}
+      </View>
+    );
+  }
+}
 
 class Row extends Component {
   render() {
+    var tokenCount = 0;
+    function tokenId() {
+      return tokenCount++;
+    }
+    let tokens = [];
+    for (let i = 0; i < this.props.row.length; i++) {
+      tokens.push(
+        <Token
+          key={tokenId()}
+          selected={this.props.row[i]}
+          index={i}
+        />
+      );
+    }
     return (
       <View style={styles.row}>
-        {this.props.row.map(token => <Token />)}
+        {tokens}
       </View>
     );
   }
@@ -25,7 +48,9 @@ class Row extends Component {
 class Token extends Component {
   render() {
     return (
-      <View style={styles.token}></View>
+      <TouchableHighlight onPress={() => console.log("testing")}>
+        <View style={[styles.token, false && styles.chosen]} />
+      </TouchableHighlight>
     );
   }
 }
@@ -43,9 +68,7 @@ export default class Nim extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        {this.state.board.map(row => <Row row={row} />)}
-      </View>
+      <Board board={this.state.board}/>
     );
   }
 }
@@ -65,6 +88,10 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
     backgroundColor: 'teal',
+    borderRadius: 50,
+  },
+  chosen: {
+    backgroundColor: 'orange',
   },
 });
 
