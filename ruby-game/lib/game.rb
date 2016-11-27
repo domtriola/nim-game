@@ -3,9 +3,10 @@ require_relative 'human_player'
 require_relative 'computer_player'
 
 class Game
-  attr_accessor :board, :player_one, :player_two, :current_player, :last_move
+  attr_accessor :board, :player_one, :player_two,
+                :current_player, :last_move
 
-  def initialize(rows = [3,4,5])
+  def initialize(rows = [3, 4, 5])
     @board = Board.new(rows)
     @player_one = HumanPlayer.new
     @player_two = ComputerPlayer.new

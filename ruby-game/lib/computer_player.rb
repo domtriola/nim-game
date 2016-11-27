@@ -24,7 +24,7 @@ class ComputerPlayer
 
   def makes_zero_nim_sum?(move)
     board.remove_from_row(move)
-    if Nim.sum(board.rows) == 0
+    if Nim.sum(board.rows).zero?
       board.add_to_row(move)
       true
     else
