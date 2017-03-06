@@ -3,16 +3,27 @@ defmodule Nim do
   Documentation for Nim.
   """
 
-  @doc """
-  Hello world.
+  def play do
+    play_turn(%Nim.Game{})
+  end
 
-  ## Examples
+  def play_turn(%Nim.Game{board: board, turn: turn, over: over} = game) do
+    case over do
+      false ->
+        move = IO.gets("What's your move?\n")
+        handle_response(move)
+      true ->
+        IO.puts("Game over")
+    end
+  end
 
-      iex> Nim.hello
-      :world
+  def handle_response(move) do
+    move
+    |> make_move
+    |> play_turn
+  end
 
-  """
-  def hello do
-    :world
+  def make_move(move) do
+    %Nim.Game{}
   end
 end
