@@ -1,9 +1,9 @@
 defmodule Nim.Game do
   defstruct(
-    board: [{0, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0, 0}],
-    turn: 0,
+    board: %{a: [0, 0, 0],
+            b: [0, 0, 0, 0],
+            c: [0, 0, 0, 0, 0]},
+    turn: :one,
     over: false
   )
 end
