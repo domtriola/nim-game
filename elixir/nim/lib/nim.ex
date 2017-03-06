@@ -74,6 +74,14 @@ defmodule Nim do
     %Nim.Game{game | over: over, turn: next_player}
   end
 
-  defp display_board(game) do
+  defp display_board(%Nim.Game{board: board}) do
+    keys = Map.keys(board)
+
+    Enum.each keys, fn(key) ->
+      row = Enum.map board[key], fn(token) ->
+        Integer.to_string(token)
+      end
+      IO.puts("#{key}: #{row}")
+    end
   end
 end
