@@ -5,26 +5,41 @@ defmodule Nim do
   take the last token loses.
   """
 
-  def play do
+  def start do
     play_turn(%Nim.Game{})
   end
 
-  def play_turn(%Nim.Game{over: over} = game) do
+  defp play_turn(%Nim.Game{over: over} = game) do
+    display_board(game)
+
     case over do
       false ->
-        handle_response(game, IO.gets("What's your move?\n"))
+        handle_response(game, String.trim(IO.gets("What's your move?\n")))
       true ->
         IO.puts("Game over")
     end
   end
 
-  def handle_response(game, move) do
+  defp handle_response(game, move) do
     game
     |> make_move(move)
-    |> handle_state
+    |> switch_players
     |> play_turn
   end
 
+  @doc """
+    Takes `game` and `move` arguments. Move specifies amount of tokens
+    to remove and the row to remove them from.
+
+  ## Examples
+
+      iex> Nim.make_move(%Nim.Game{}, "a 2")
+      %Nim.Game{board: %{a: [0],
+                         b: [0, 0, 0, 0],
+                         c: [0, 0, 0, 0, 0]},
+                         over: false, turn: :one}
+
+  """
   def make_move(%Nim.Game{board: board} = game, move) do
     [row_key, qty] = String.split(move, ~r{,\s+|,|\s+})
 
@@ -36,7 +51,29 @@ defmodule Nim do
     %Nim.Game{game | board: new_board}
   end
 
-  def handle_state(game) do
+  @doc """
+    Switches players and checks to see if game is won.
 
+  ## Examples
+
+      iex> Nim.switch_players(%Nim.Game{board: %{a: [], b: [], c: []}})
+      %Nim.Game{board: %{a: [], b: [], c: []}, over: true, turn: :two}
+
+  """
+  def switch_players(%Nim.Game{board: board, turn: turn} = game) do
+    next_player =
+      case turn do
+        :one -> :two
+        :two -> :one
+      end
+
+    over = Enum.all? board, fn({_key, tokens}) ->
+      length(tokens) == 0
+    end
+
+    %Nim.Game{game | over: over, turn: next_player}
+  end
+
+  defp display_board(game) do
   end
 end
